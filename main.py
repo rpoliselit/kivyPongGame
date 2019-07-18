@@ -11,8 +11,8 @@ class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
-
-    def serve_ball(self, vel=(4,0)):
+    vel_int = Vector(4,0).rotate(randint(-45,45))
+    def serve_ball(self, vel=vel_int):
         self.ball.center = self.center
         self.ball.velocity = vel
 
@@ -29,8 +29,12 @@ class PongGame(Widget):
             #score
             if self.ball.x < self.x:
                 self.player2.score += 1
+                self.ball.pos = self.center
+                self.ball.velocity = self.vel_int
             if self.ball.right > self.width:
                 self.player1.score += 1
+                self.ball.pos = self.center
+                self.ball.velocity = self.vel_int * -1
 
         #bounce of paddles
         self.player1.bounce_ball(self.ball)
