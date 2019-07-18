@@ -1,13 +1,15 @@
 #: kivy 1.11.1
 
 <PongGame>:
-#line that separates the fields
+    ball: pong_ball
+
+    #line that separates the fields
     canvas:
         Rectangle:
             pos: self.center_x - 5, 0
             size: 10, self.height
 
-#label with score
+    #label with score
     Label:
         font_size: 70
         center_x: root.width / 4
@@ -21,6 +23,7 @@
         text: '0'
 
     PongBall:
+        id: pong_ball
         center: self.parent.center
 
 <PongBall>:
