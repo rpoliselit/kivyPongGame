@@ -2,6 +2,8 @@
 
 <PongGame>:
     ball: pong_ball
+    player1: player_left
+    player2: player_right
 
     #line that separates the fields
     canvas:
@@ -22,12 +24,31 @@
         top: root.top - 50
         text: '0'
 
+    #ball
     PongBall:
         id: pong_ball
         center: self.parent.center
 
+    #players
+    PongPaddle:
+        id: player_left
+        x: root.x
+        center_y: root.center_y
+
+    PongPaddle:
+        id: player_right
+        x: root.width - self.width
+        center_y: root.center_y
+
 <PongBall>:
     size: 50, 50
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<PongPaddle>:
+    size: 25, 200
     canvas:
         Rectangle:
             pos: self.pos
