@@ -20,12 +20,13 @@ class PongGame(Widget):
         self.ball.move()
 
         #bounce off vertical edges
-        if self.ball.y < 0 or self.ball.top > self.ball.height:
+        if self.ball.y < 0 or self.ball.top > self.height:
             self.ball.velocity_y *= -1
 
         #bounce off horizontal edges
-        if self.ball.x < 0 or self.ball.right > self.ball.width:
+        if self.ball.x < 0 or self.ball.right > self.width:
             self.ball.velocity_x *= -1
+            #score
             if self.ball.x < self.x:
                 self.player2.score += 1
             if self.ball.x > self.width:
