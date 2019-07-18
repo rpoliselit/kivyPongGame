@@ -24,12 +24,12 @@ class PongGame(Widget):
             self.ball.velocity_y *= -1
 
         #bounce off horizontal edges
-        if self.ball.x < 0 or self.ball.right > self.width:
+        if self.ball.x < self.x or self.ball.right > self.width:
             self.ball.velocity_x *= -1
             #score
             if self.ball.x < self.x:
                 self.player2.score += 1
-            if self.ball.x > self.width:
+            if self.ball.right > self.width:
                 self.player1.score += 1
 
         #bounce of paddles
