@@ -1,10 +1,33 @@
-#:kivy 1.11.1
+import kivy
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import NumericProperty, ReferenceListProperty, ObjectProperty
 from kivy.vector import Vector
 from kivy.clock import Clock
 from random import randint
+
+kivy.require('1.11.1')
+
+class PongBall(Widget):
+    velocity_x, velocity_y = NumericProperty(0), NumericProperty(0)
+    velocity = ReferenceListProperty(velocity_x, velocity_y)
+
+    def move(self):
+        self.pos = Vector(*self.velocity) + self.pos
+
+
+class PongPaddle(Widget):
+    score = NumericProperty(0)
+
+    def bounce_ball(self, ball):
+        if self.collide_widget(ball):
+            vx , vy = ball.velocity
+            offset = (ball.center_y-self.center_y) / (self.height / 2)
+            bounced = Vector(-1 * vx, vy)
+            vel = bounced * 1.1
+            ball.velocity = vel.x, vel.y + offset
+
 
 class PongGame(Widget):
 
@@ -20,21 +43,22 @@ class PongGame(Widget):
         self.ball.move()
 
         #bounce off vertical edges
-        if self.ball.y < 0 or self.ball.top > self.height:
+        if self.ball.y < self.y or self.ball.top > self.height:
             self.ball.velocity_y *= -1
 
         #bounce off horizontal edges
-        if self.ball.x < self.x or self.ball.right > self.width:
-            self.ball.velocity_x *= -1
-            #score
-            if self.ball.x < self.x:
-                self.player2.score += 1
-                self.ball.pos = self.center
-                self.ball.velocity = self.vel_int
-            if self.ball.right > self.width:
-                self.player1.score += 1
-                self.ball.pos = self.center
-                self.ball.velocity = self.vel_int * -1
+        # if self.ball.x < self.x or self.ball.right > self.width:
+        #     self.ball.velocity_x *= -1
+
+        #score
+        if self.ball.x < self.x:
+            self.player2.score += 1
+            self.ball.pos = self.center
+            self.ball.velocity = self.vel_int
+        if self.ball.right > self.width:
+            self.player1.score += 1
+            self.ball.pos = self.center
+            self.ball.velocity = self.vel_int * -1
 
         #bounce of paddles
         self.player1.bounce_ball(self.ball)
@@ -47,31 +71,31 @@ class PongGame(Widget):
             self.player2.center_y = touch.y
 
 
-class PongBall(Widget):
-    velocity_x, velocity_y = NumericProperty(0), NumericProperty(0)
-    velocity = ReferenceListProperty(velocity_x, velocity_y)
+class Menu(Screen):
+    pass
 
-    def move(self):
-        self.pos = Vector(*self.velocity) + self.pos
 
-class PongPaddle(Widget):
-    score = NumericProperty(0)
+class GameScreen(Screen):
+    def __init__(self, **kwargs):
+        super(GameScreen, self).__init__(**kwargs)
+        self.game = PongGame()
+        self.game.serve_ball()
+        self.add_widget(self.game)
+        Clock.schedule_interval(self.game.update, 1.0 / 60.0)
 
-    def bounce_ball(self, ball):
-        if self.collide_widget(ball):
-            vx , vy = ball.velocity
-            offset = (ball.center_y-self.center_y) / (self.height / 2)
-            bounced = Vector(-1 * vx, vy)
-            vel = bounced * 1.1
-            ball.velocity = vel.x, vel.y + offset
 
 class PongApp(App):
     def build(self):
-        game = PongGame()
-        game.serve_ball()
-        Clock.schedule_interval(game.update, 1.0 / 60.0)
-        return game
+        self.load_kv('pong.kv')
+        sm = ScreenManager()
+        sm.add_widget(Menu(name='menu'))
+        sm.add_widget(GameScreen(name='game'))
+        return sm
 
 
 if __name__ == '__main__':
     PongApp().run()
+
+#IMPORTANTE!!!!!!!
+#Fazer um programa para somar vetores baseado no paint em kivy.
+#Entender pq não atualiza

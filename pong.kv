@@ -1,5 +1,29 @@
 #: kivy 1.11.1
 
+<MenuButton@Button>:
+    font_size: '50sp'
+
+<Menu>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding:'50dp','50dp'
+        spacing: '150dp'
+        Label:
+            font_size: '140sp'
+            center_x: root.center_x
+            center_y: root.center_y
+            text: 'PONG'
+        BoxLayout:
+            spacing:'50dp'
+            MenuButton:
+                text: 'Start'
+                on_release:app.root.current = 'game'
+            MenuButton:
+                text: 'Exit'
+                on_release:app.stop()
+
+<GameScreen>:
+
 <PongGame>:
     ball: pong_ball
     player1: player_left
@@ -41,7 +65,7 @@
         center_y: root.center_y
 
 <PongBall>:
-    size: 50, 50
+    size: 25, 25
     canvas:
         Rectangle:
             pos: self.pos
