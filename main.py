@@ -86,7 +86,6 @@ class GameScreen(Screen):
 
 class PongApp(App):
     def build(self):
-        self.load_kv('pong.kv')
         sm = ScreenManager()
         sm.add_widget(Menu(name='menu'))
         sm.add_widget(GameScreen(name='game'))
@@ -95,7 +94,3 @@ class PongApp(App):
 
 if __name__ == '__main__':
     PongApp().run()
-
-#IMPORTANTE!!!!!!!
-#Fazer um programa para somar vetores baseado no paint em kivy.
-#Entender pq não atualiza
